@@ -1,0 +1,174 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title></title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id=""
+                  title=""
+                  environment="web"
+                  feedback-link="">
+    
+      <google-codelab-step label="Introduction" duration="0">
+        <p class="image-container"><img style="width: 624.00px" src="img/a97119a2d6204d0f.png"></p>
+<p>Support for multiplatform programming is one of Kotlin&#39;s key benefits. It reduces time spent writing and maintaining the same code for different platforms while retaining the flexibility and benefits of native programming.</p>
+<p>This is how Kotlin Multiplatform structure looks like:</p>
+<p class="image-container"><img style="width: 624.00px" src="img/917f1cb842a9a679.png"></p>
+<p><strong>Common Kotlin</strong> includes the language, core libraries, and basic tools. Code written in common Kotlin works everywhere on all platforms.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="How it works" duration="0">
+        <ul>
+<li>To interop with platforms, use platform-specific versions of Kotlin. <strong>Platform-specific versions of Kotlin</strong> (Kotlin/JVM, Kotlin/JS, Kotlin/Native) include extensions to the Kotlin language, and platform-specific libraries and tools.</li>
+<li>Through these platforms you can access the <strong>platform native code</strong> (JVM, JS, and Native) and leverage all native capabilities.</li>
+<li>With Kotlin Multiplatform libraries, you can reuse the multiplatform logic in common and platform-specific code. Common code can rely on a set of libraries that cover everyday tasks such as <a href="http://ktor.io/clients/http-client/multiplatform.html" target="_blank">HTTP</a>, <a href="https://github.com/Kotlin/kotlinx.serialization" target="_blank">serialization</a>,<a href="https://github.com/Kotlin/kotlinx.coroutines" target="_blank">managing coroutines</a>, .</li>
+</ul>
+<p>If you need to access platform-specific APIs from the shared code, use the Kotlin mechanism of <a href="https://kotlinlang.org/docs/mpp-connect-to-apis.html" target="_blank">expected and actual declarations</a>.</p>
+<p>With this mechanism, a common source set defines an <em>expected declaration</em>, and platform source sets must provide the <em>actual declaration</em> that corresponds to the expected declaration. This works for most Kotlin declarations, such as functions, classes, interfaces, enumerations, properties, and annotations.</p>
+<p class="image-container"><img style="width: 624.00px" src="img/a5a042c3225ddff2.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Set up an environment for KMM development" duration="0">
+        <p>Before you begin <a href="https://kotlinlang.org/docs/mobile/create-first-app.html" target="_blank">creating your first application</a> to work on both iOS and Android, start by setting up an environment for Kotlin Multiplatform Mobile (KMM) development:</p>
+<ul>
+<li>1. If you are going to work with shared code or Android-specific code, you can work on any computer with an operating system supported by <a href="https://developer.android.com/studio" target="_blank">Android Studio</a>.<br>If you also want to write iOS-specific code and run an iOS application on a simulated or real device, use a Mac with a macOS. These steps cannot be performed on other operating systems, such as Microsoft Windows. This is due to an Apple requirement.</li>
+<li>2. Install <a href="https://developer.android.com/studio" target="_blank">Android Studio</a> – version 4.2 or higher.<br>You will use Android Studio for creating your multiplatform applications and running them on simulated or hardware devices.</li>
+<li>3. To run iOS app install <a href="https://apps.apple.com/us/app/xcode/id497799835" target="_blank">Xcode</a> – version 11.3 or higher.<br>It&#39;s not a requirement to complete this codelab, but it&#39;s recommended</li>
+<li>4. Make sure that you have a <a href="https://kotlinlang.org/docs/mobile/kmm-plugin-releases.html#release-details" target="_blank">compatible Kotlin plugin</a> installed.<br>In Android Studio, select <strong>Tools</strong> | <strong>Kotlin</strong> | <strong>Configure Kotlin Plugin Updates</strong> and check the current Kotlin plugin version. If needed, update to the latest version in the <strong>Stable</strong> update channel.</li>
+<li>5. Install the <em>Kotlin Multiplatform Mobile</em> plugin.<br>In Android Studio, select <strong>Preferences</strong> | <strong>Plugins</strong>, search for the plugin <em>Kotlin Multiplatform Mobile</em> in <strong>Marketplace</strong> and install it.<br><img alt="Kotlin Multiplatform Mobile plugin" title="Kotlin Multiplatform Mobile plugin" style="width: 500.00px" src="img/4c38ef05ec893f4.png"><br>Check out <a href="https://kotlinlang.org/docs/mobile/kmm-plugin-releases.html" target="_blank">KMM plugin release notes</a>.</li>
+<li>Install the <a href="https://www.oracle.com/java/technologies/javase-downloads.html" target="_blank">JDK</a> if you haven&#39;t already done so.<br>To check if it&#39;s installed, run the command <code>java -version</code> in the Terminal.</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Establish a baseline" duration="2">
+        <h2 is-upgraded><strong>What&#39;s our starting point?</strong></h2>
+<p>Our starting point is a Kotlin Multplatform Mobile project created from an Android Studio template <a href="https://git.frontiercargroup.org/alexander.tizik/multiplatform-codelab" target="_blank">available here</a></p>
+<p> Let&#39;s take a look at project structure:</p>
+<p class="image-container"><img style="width: 442.63px" src="img/e8c4ebe132c2da6a.png"></p>
+<p>The basic idea here is that we have a shared module which contains the core application logic used in both target platforms: classes, functions, and so on. This is a <a href="https://kotlinlang.org/docs/reference/mpp-intro.html" target="_blank">Kotlin Multiplatform</a> module that compiles into an Android library and an iOS framework. It uses Gradle with the Kotlin Multiplatform plugin applied and has targets for Android and iOS.</p>
+<p>We can run the application as usual, do note that we can select androidApp or iosApp right in Android Studio:<img style="width: 624.00px" src="img/66863ce66d8d45b5.png"></p>
+<p class="image-container"><img style="width: 624.00px" src="img/e9c6c4d4391ffaa2.png"></p>
+<p>And this is the expected outcome:</p>
+<p class="image-container"><img style="width: 295.00px" src="img/7de70d1801d00d47.png"></p>
+<p class="image-container"><img style="width: 295.75px" src="img/d1714ad4eed74f1a.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Introducing changes" duration="0">
+        <p>Let&#39;s modify our code. First we need to understand how exactly it works, so let&#39;s look at our codebase</p>
+<p>This class doesn&#39;t look unusual:</p>
+<p>Greeting.kt</p>
+<p class="image-container"><img style="width: 624.00px" src="img/93e877cabedbd4a6.png"></p>
+<p>In fact, it&#39;s used as is in Android module:</p>
+<p>MainActivity.kt</p>
+<p class="image-container"><img style="width: 624.00px" src="img/3d1d4b0160559db5.png"></p>
+<p>On iOS it looks like any other ObjC framework dependency, and can be called like this:</p>
+<p>ContentView.swift</p>
+<p class="image-container"><img style="width: 624.00px" src="img/72bf8834b4c1b9b.png"></p>
+<h2 is-upgraded>Try this: Update &#34;Hello ...&#34; to &#34;Hi ...&#34; and check if both iOS and Android have the same update reflected in their UI</h2>
+<p>How do we reconcile actual differences between platforms? Let&#39;s look at our Platform class in the shared module:</p>
+<p class="image-container"><img style="width: 624.00px" src="img/b1d22e0e06fe4f76.png"></p>
+<p>This class in fact looks suspiciously similar to an abstract class, but the power of expect declaration applies to practically anything - functions, classes, interfaces, enumerations, properties, and annotations.</p>
+<p>Two `A` buttons on the left are shorthands for actual declarations - click to actually see every actual implementation - one for each platform.</p>
+<p class="image-container"><img style="width: 624.00px" src="img/eaa23885562ea00a.png"></p>
+<p class="image-container"><img style="width: 624.00px" src="img/29ecaba23c75ebac.png"></p>
+<h2 is-upgraded>Try this: Update strings in any actual declarations and check if the other platform was affected</h2>
+<p>In the iOS declaration we can see a curios import - iOS platform libraries are actually available to Kotlin iOS specific code, as well as cocoapods ObjC or ObjC exported libraries (direct Swift support is on the roadmap at the moment).</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Meaningful multiplatform functionality" duration="0">
+        <p>So far we&#39;ve played with a toy example. Let&#39;s introduce a network call! </p>
+<p>We have two options - create an expect network client, and delegate actual implementation to, for example, OkHttp and AlamoFire. Second option is to take a library that&#39;s already done this for us, which is what we&#39;re going to do.</p>
+<p>Kotlin has a first-party HTTP client called Ktor. How do we import it? Let&#39;s open our gradle config for the shared module, specifically the sourceSets:</p>
+<p class="image-container"><img style="width: 624.00px" src="img/c584f9ea440f4053.png"></p>
+<p>As you can see, here we can introduce platform specific and common dependencies, which is exactly what we need.</p>
+<p>Try this: Add add a common, android and iOS Ktor dependencies from <a href="https://ktor.io/docs/http-client-multiplatform.html#add-dependencies" target="_blank">this page</a></p>
+<p>Now we can make network calls in the common code. </p>
+<p>Let&#39;s try to modify Greeting class to return a response from the network instead.</p>
+<p>To try this on your own you can read this <a href="https://ktor.io/docs/client.html#create-client" target="_blank">documentation page</a></p>
+<p>The end result should look something like this:</p>
+<p class="image-container"><img style="width: 624.00px" src="img/abe550356c5f18c.png"></p>
+<p>For those unfamiliar with coroutines, we have to add a suspend modifier here because all ktor requests are suspending, meaning they will not block the calling thread.</p>
+<p>For this codelab we&#39;re going to skip a deserialization step and fetch just a plain string. In case you want to know more about serialization/deserialization in Multiplatform <a href="https://github.com/Kotlin/kotlinx.serialization" target="_blank">refer here</a>.</p>
+<p>Ideally we wouldn&#39;t be exposing raw suspend functions to platform code and use something like Flow(which can be configured to work like LiveData on Android), but for brevity let&#39;s launch our suspend functions right inside our view layer:</p>
+<p>MainActivity.kt</p>
+<p>(don&#39;t forget to add coroutines dependency to androidApp module)</p>
+<p><code>implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3")</code></p>
+<p class="image-container"><img style="width: 624.00px" src="img/d91f9b42cf840e95.png"></p>
+<p>ContentView.swift</p>
+<p class="image-container"><img style="width: 624.00px" src="img/4032220c9a15510f.png"></p>
+<p>SceneDelegate.swift</p>
+<p>(don&#39;t forget to import shared here)</p>
+<p class="image-container"><img style="width: 624.00px" src="img/1b2eb32c4537eb72.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Going forward" duration="0">
+        <p>What to try next? </p>
+<p>There are several layers that we can add to this app so it looks like a production level application. Let&#39;s find out how.</p>
+<ul>
+<li>How do we store local data?</li>
+</ul>
+<p>The usual way to do that in Android today is by using SQLite through Room. Room doesn&#39;t support Kotlin Multiplatform, but <a href="https://github.com/cashapp/sqldelight" target="_blank">SQLDelight</a> is available and works on mostly the same principle, only instead of generating SQL from Entities it generates Entities from SQL. </p>
+<p>Try this: Create a database to store the retrieved text</p>
+<ul>
+<li>Reactive programming?</li>
+</ul>
+<p>RxJava, LiveData, RxSwift etc. are only available on their respective platforms. There are several implementations of reactive libraries for Kotlin Multiplatform, including an RxJava reimplementation, but the recommended way is to use Kotlin Flow from coroutines library.</p>
+<p>Try this: Instead of launching a request right from the View layer, store the result in a StateFlow and subscribe to changes from the View layer</p>
+<ul>
+<li>Dependency injection?</li>
+</ul>
+<p>There are no analogous Dagger-like solutions, the closest thing available is Koin, although it requires some boilerplate and verifying graph through a gradle task, it&#39;s better than nothing.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Congratulations" duration="0">
+        <p>Congratulations, you&#39;ve successfully built your first Kotlin Multiplatform App, or in fact two multiplatform apps - iOS and Android.</p>
+<p>It is, in fact, possible to extend this - Kotlin Multiplatform support Web and Desktop as well.</p>
+<p>Some further reading on how to use it on <a href="https://kotlinlang.org/docs/js-overview.html" target="_blank">Web</a></p>
+<p>Or even on <a href="https://www.jetbrains.com/lp/compose/" target="_blank">desktop</a> sharing some Android and Desktop UI code through another Multiplatform library - Jetpack Compose</p>
+<p class="image-container"><img style="width: 624.00px" src="img/ff2d904f2374dff6.png"></p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>
